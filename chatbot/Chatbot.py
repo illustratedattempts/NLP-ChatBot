@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 class Chatbot:
     def __init__(self):
         # Get API key from environment variable
-        load_dotenv()
+        load_dotenv("api_key.env")
         openai.api_key = os.getenv("OPENAI_KEY")
         
     def generate_message(self, user_msg):
