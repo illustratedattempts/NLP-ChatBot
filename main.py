@@ -22,6 +22,7 @@ if st.session_state['generated']:
         message(st.session_state["generated"][i], key=str(i))
         message(st.session_state['past'][i], is_user=True, key=str(i) + '_user')
 
+
 def get_message():
     text_input = st.text_input("Message: ", "")
     return text_input
