@@ -2,10 +2,12 @@ import streamlit as st
 from streamlit_chat import message
 from chatbot.Chatbot import Chatbot
 
+
+# - If no chat history exists, prompt Chatbot to ask user about their likes and dislikes
+# - Make chat history a downloadable object
+
 # Create title for the page
-st.set_page_config(
-    page_title="HLT Chatbot"
-)
+st.title("HLT Chatbot demo")
 
 # Create the header and markdown (below header)
 st.header("HLT Chatbot")
@@ -29,7 +31,6 @@ if user_msg:
     response = chat.generate_message(user_msg)
     st.session_state.past.append(user_msg)
     st.session_state.generated.append(response)
-    
 
 if st.session_state['generated']:
     for i in range(len(st.session_state['generated'])-1, -1, -1):

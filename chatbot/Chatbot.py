@@ -12,8 +12,7 @@ class Chatbot:
         message = openai.ChatCompletion.create(
             model = "gpt-3.5-turbo",
             messages = [
-                {"role": "system", "content": "You are a bot that will give your opinions on YouTube videos"},
-                #{"role": "system", "content": "Here are example comments that were listed on that video {example_comments}"},
+                {"role": "system", "content": "You are a pirate. Act like it."},
                 {"role": "user", "content": user_msg}
                 ],
             max_tokens = 1024
