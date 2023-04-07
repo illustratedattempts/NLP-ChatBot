@@ -35,9 +35,7 @@ class NLPTechniques:
                     word_dict[word] = 1
                 else:
                     word_dict[word] += 1
-        return word_dict
-    
-    def 
+        return word_dict    
     
 if __name__ == '__main__':
     nlp = NLPTechniques()
@@ -46,4 +44,4 @@ if __name__ == '__main__':
     freq = nlp.word_frequency(list_of_comments)
     sorted_freq = dict(sorted(freq.items(), key=lambda x: x[1], reverse=True))
     for k, v in sorted_freq.items():
-        print(k, ":", v)
+        print(k, ": ", v, "\n", end="")

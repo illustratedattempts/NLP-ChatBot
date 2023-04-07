@@ -26,13 +26,25 @@ def get_message():
 chat = Chatbot()
 
 user_msg = get_message()
+topic_selected = False
 
-if user_msg:
+if 'prompt' not in st.session_state:
+    initial_msg = "Pick a topic to talk about (i.e. Backpacking in Europe, Meal prep recipes, etc.)"
+    message(initial_msg)
+    message(user_msg, is_user=True)
+    # We assume the user actually types in a topic
+    #  If we have extra time, we can do verification.
+    #  (i.e. user types in 1 letter or 1 number only, nonsense, empty string, etc.)
+    
+    
+    
+if user_msg and topic_selected:
+    st.session_state['prompt'] = True
     response = chat.generate_message(user_msg)
     st.session_state.past.append(user_msg)
     st.session_state.generated.append(response)
 
-if st.session_state['generated']:
+if st.session_state['prompt']:
     for i in range(len(st.session_state['generated'])-1, -1, -1):
         message(st.session_state["generated"][i], key=str(i))
         message(st.session_state['past'][i], is_user=True, key=str(i) + '_user')
