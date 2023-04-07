@@ -3,19 +3,31 @@ from dotenv import load_dotenv
 from googleapiclient.discovery import build
 from urllib.parse import urlparse, parse_qs
 
-class CommentFinder:
+class YoutubeToolkit:
     def __init__(self):
         load_dotenv("api_keys.env")
         youtube_api_key = os.getenv("YOUTUBE_API_KEY")
         self.youtube = build('youtube', 'v3', developerKey=youtube_api_key)
     
     # Verifies the link provided is from YouTube
-    def verify_url(self, parsed_url):        
+    def verify_url(self, url):        
         # Isolate the domain and verify youtube.com or youtu.be
+        parsed_url = urlparse(url)
         domain = parsed_url.netloc
         if not (domain.endswith('youtube.com') or domain == 'youtu.be'):
             return False
         return True
+    
+    # Gets video name from video id
+    def get_video_name(self, url):
+        parsed_url = urlparse(url)
+        video_id = self.get_video_id(parsed_url)
+        video_response =  self.youtube.videos().list(
+            part='snippet',
+            id=video_id
+        ).execute()
+        return video_response['items'][0]['snippet']['title']
+        
     
     # Gets video ID from parsed URL
     def get_video_id(self, parsed_url):
@@ -33,7 +45,7 @@ class CommentFinder:
         parsed_url = urlparse(url)
         
         # Verify URL is YouTube link
-        if not self.verify_url(parsed_url):
+        if not self.verify_url(url):
             print("Error trying to verify URL is YouTube link")
             return
         
@@ -68,5 +80,5 @@ class CommentFinder:
         return comment_array
         
 if __name__ == '__main__':
-    cf = CommentFinder()
-    cf.comment_finder("https://www.youtube.com/watch?v=YUVf0AFkn1Y")
+    yt = YoutubeToolkit()
+    print(yt.get_video_name("https://www.youtube.com/watch?v=YCzgnzWK_r0"))

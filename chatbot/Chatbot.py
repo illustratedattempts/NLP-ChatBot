@@ -8,13 +8,10 @@ class Chatbot:
         load_dotenv("api_keys.env")
         openai.api_key = os.getenv("OPENAI_KEY")
         
-    def generate_message(self, user_msg):
+    def generate_message(self, msg_log):
         message = openai.ChatCompletion.create(
             model = "gpt-3.5-turbo",
-            messages = [
-                {"role": "system", "content": "You are a pirate. Act like it."},
-                {"role": "user", "content": user_msg}
-                ],
+            messages = msg_log,
             max_tokens = 1024
         )
         return message.choices[0].message.content

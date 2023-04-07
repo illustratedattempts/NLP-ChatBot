@@ -1,10 +1,19 @@
 import re
+import spacy
 from nltk.corpus import stopwords, wordnet
 from nltk.tokenize import word_tokenize
-
-from CommentFinder import CommentFinder
+from nltk.stem import WordNetLemmatizer
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 class NLPTechniques:
+    # Cleans the list of comments
+    def clean_text_array(self, comment_list):
+        clean_arr = []
+        for comment in comment_list:
+            clean_text = self.clean_text(comment)
+            if len(clean_text) > 2:
+                clean_arr.append(clean_text)
+        return clean_arr
     
     # Input: String of text
     # Output: List of filtered words
@@ -17,8 +26,11 @@ class NLPTechniques:
         text = text.lower()
         # Tokenize the text
         words = word_tokenize(text)
+        #Lemmatize the words
+        lemmatizer = WordNetLemmatizer()
+        lemmatized_tokens = [lemmatizer.lemmatize(token) for token in words]
         # Filter for English words
-        english_words = [word for word in words if wordnet.synsets(word)]
+        english_words = [word for word in lemmatized_tokens if wordnet.synsets(word)]
         # Remove stopwords
         stop_words = stopwords.words('english')
         english_words = [word for word in english_words if word not in stop_words]
@@ -29,21 +41,21 @@ class NLPTechniques:
     def word_frequency(self, comment_list):
         word_dict = {}
         for comment in comment_list:
-            word_list = self.clean_text(comment)
-            for word in word_list:
+            for word in comment:
                 if word not in word_dict:
                     word_dict[word] = 1
                 else:
                     word_dict[word] += 1
         return word_dict
-    
-    def 
+        
+    # Input: String of clean words
+    # Output: Sentiment score
+    def sentiment_analysis(self, words):
+        sa = SentimentIntensityAnalyzer()
+        score = sa.polarity_scores(words)
+        return [score['neg'] * 100, score['neu'] * 100, score['pos'] * 100]
     
 if __name__ == '__main__':
     nlp = NLPTechniques()
-    cf = CommentFinder()
-    list_of_comments = cf.comment_finder("https://www.youtube.com/watch?v=YUVf0AFkn1Y")
-    freq = nlp.word_frequency(list_of_comments)
-    sorted_freq = dict(sorted(freq.items(), key=lambda x: x[1], reverse=True))
-    for k, v in sorted_freq.items():
-        print(k, ":", v)
+    a = nlp.sentiment_analysis("Hello! I hate people. I like puppies.")
+    print(a)
