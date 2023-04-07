@@ -5,7 +5,7 @@ from urllib.parse import urlparse, parse_qs
 
 class CommentFinder:
     def __init__(self):
-        load_dotenv()
+        load_dotenv("api_keys.env")
         youtube_api_key = os.getenv("YOUTUBE_API_KEY")
         self.youtube = build('youtube', 'v3', developerKey=youtube_api_key)
     
@@ -65,7 +65,6 @@ class CommentFinder:
         for comment_thread in comment_response['items']:
             comment_array.append(comment_thread['snippet']['topLevelComment']['snippet']['textOriginal'])
             
-        print(comment_array)
         return comment_array
         
 if __name__ == '__main__':
