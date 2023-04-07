@@ -26,7 +26,7 @@ class NLPTechniques:
     
     # Input: list of comments
     # Output: dictionary of word counter
-    def wordFrequency(self, comment_list):
+    def word_frequency(self, comment_list):
         word_dict = {}
         for comment in comment_list:
             word_list = self.clean_text(comment)
@@ -37,11 +37,13 @@ class NLPTechniques:
                     word_dict[word] += 1
         return word_dict
     
+    def 
+    
 if __name__ == '__main__':
     nlp = NLPTechniques()
     cf = CommentFinder()
     list_of_comments = cf.comment_finder("https://www.youtube.com/watch?v=YUVf0AFkn1Y")
-    freq = nlp.wordFrequency(list_of_comments)
+    freq = nlp.word_frequency(list_of_comments)
     sorted_freq = dict(sorted(freq.items(), key=lambda x: x[1], reverse=True))
     for k, v in sorted_freq.items():
         print(k, ":", v)
