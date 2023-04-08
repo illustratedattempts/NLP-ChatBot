@@ -60,13 +60,17 @@ class YoutubeToolkit:
         # The INDEXES should correspond
         videos_title_arr = []
         videos_id_arr = []
+        videos_link_arr = []
         for video in response_list['items']:
             videos_title_arr.append(video['snippet']['title'])  # Grabs the TITLE
             videos_id_arr.append(video['id']['videoId']) # Grabs the VID ID
 
+        for video_id in videos_id_arr: # These are for the links
+            videos_link_arr.append("https://www.youtube.com/watch?v="+video_id)
         #print(videos_title_arr)
         #print(videos_id_arr)
-        return videos_id_arr, videos_title_arr
+        #print(videos_link_arr)
+        return videos_link_arr, videos_title_arr
 
     def comment_finder(self, url):
         # Parse the URL using URLParse
