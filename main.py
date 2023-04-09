@@ -7,6 +7,7 @@ import os
 import pickle
 import re
 import textwrap
+import html
 
 class Main:
     def __init__(self):
@@ -58,7 +59,7 @@ class Main:
         while True:
             video_link, video_title = self.topic_verification()  # Will ALWAYS be FORCED to return THIS UNLESS
             while True:  # Confirmation
-                print("Youtube Bot: Are you sure you want to look at {}? (Y/N)".format(video_title))
+                print("Youtube Bot: Are you sure you want to look at {}? (Y/N)".format(html.unescape(video_title)))
                 confirmation_input = input(
                     "{}: ".format(self.user_name)).lower()  # @TODO Need to make it all either caps or lower case [DONE]
                 if confirmation_input == '!exit':
@@ -109,7 +110,7 @@ class Main:
 
                 print("Youtube Bot: Please Pick a Video From The Following Listed Below.")
                 for num in range(len(videos_title_arr)):
-                    print(str(num + 1) + '. ' + videos_title_arr[num] + ' | ' + videos_link_arr[num])
+                    print(str(num + 1) + '. ' + html.unescape(videos_title_arr[num]) + ' | ' + videos_link_arr[num])
 
                 print("Youtube Bot: Please enter the video integer number.")
 
@@ -135,14 +136,15 @@ class Main:
                 exit(0)
 
     def get_user_likes_and_dislikes(self, video_title):
-        print("Youtube Bot: What do you like about: {}?".format(video_title))
+        video_title_unescape = html.unescape(video_title)
+        print("Youtube Bot: What do you like about: {}?".format(video_title_unescape))
         user_likes = input("{}: ".format(self.user_name))
         if user_likes == '!exit':
             print("Thanks for talking to Youtube Bot :)")
             exit(0)
         self.user_data.add_like = user_likes
         # print("Youtube Bot: Okay.")
-        print("Youtube Bot: What do you dislike about {}?".format(video_title))
+        print("Youtube Bot: What do you dislike about {}?".format(video_title_unescape))
         user_dislikes = input("{}: ".format(self.user_name))
         if user_dislikes == '!exit':
             print("Thanks for talking to Youtube Bot :)")
