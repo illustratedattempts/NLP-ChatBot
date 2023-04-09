@@ -1,5 +1,4 @@
 import re
-import spacy
 from nltk.corpus import stopwords, wordnet
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
