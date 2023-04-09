@@ -13,10 +13,10 @@ class Main:
     
     def start_chat(self):
         print("YouTube Bot: Hello! I am YouTube bot.")
-        print("YouTube Bot: What's your name? ")
+        print("YouTube Bot: What's your name?\n")
         self.user_name = input("User: ")
-        print("YouTube Bot: Hello ", self.user_name, "!", sep='')
-        print("YouTube Bot: What do you want to discuss? Feel free to send a link or topic. ")
+        print("\nYouTube Bot: Hello ", self.user_name, "!", sep='')
+        print("YouTube Bot: What do you want to discuss? Feel free to send a link or topic.\n")
         discussion = input("{}: ".format(self.user_name))
         
         # If user's next message is a URL
