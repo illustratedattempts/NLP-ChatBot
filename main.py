@@ -53,7 +53,7 @@ class Main:
         self.looping_functionality()
 
     def looping_functionality(self):
-        print("Youtube Bot: If you want to end the conversation at any time, just say `!exit`")
+        print("Youtube Bot: **If you want to end the conversation at any time, just say `!exit`**")
         print("Youtube Bot: What do you want to discuss?")
         while True:
             video_link, video_title = self.topic_verification()  # Will ALWAYS be FORCED to return THIS UNLESS
@@ -209,7 +209,7 @@ class Main:
             bot_message = self.chat.generate_message(self.message_log)
             print("YouTube Bot:", textwrap.fill(bot_message, 60))
             if not new_topic_prompt:
-                print("Youtube Bot: If you want to change the topic, just say `!newtopic`")
+                print("Youtube Bot: **If you want to change the topic, just say `!newtopic`**")
                 new_topic_prompt = True
 
     def ask_user_thoughts(self):
