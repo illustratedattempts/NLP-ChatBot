@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 from googleapiclient.discovery import build
 from urllib.parse import urlparse, parse_qs
-
+import re
 
 class YoutubeToolkit:
     def __init__(self):
@@ -11,14 +11,32 @@ class YoutubeToolkit:
         self.youtube = build('youtube', 'v3', developerKey=youtube_api_key)
 
     # Verifies the link provided is from YouTube
-
     def verify_url(self, url):
+        """
         # Isolate the domain and verify youtube.com or youtu.be
         parsed_url = urlparse(url)
         domain = parsed_url.netloc
         if not (domain.endswith('youtube.com') or domain == 'youtu.be'):
             return False
         return True
+        ----------------------------------------------------------------------------------------------------------------
+        NOTES:
+        print(urlparse('https://www.youtube.com/watch?v=3')) = ParseResult(scheme='https', netloc='www.youtube.com', path='/watch', params='', query='v=3', fragment='')
+        print(urlparse('www.youtube.com/watch?v=p44HlRMSKf8')) = ParseResult(scheme='', netloc='', path='www.youtube.com/watch', params='', query='v=p44HlRMSKf8', fragment='')
+        print(urlparse('youtube.com/watch?v=3')) = ParseResult(scheme='', netloc='', path='youtube.com/watch', params='', query='v=3', fragment='')
+        print(urlparse('youtu.be/p44HlRMSKf8')) = ParseResult(scheme='', netloc='', path='youtu.be/p44HlRMSKf8', params='', query='', fragment='')
+
+        * Does not pass the case where HTTPS is not present -> Thus, the link becomes stored in path instead of netloc
+        * Does not verify that the link is properly formatted with the essential pieces
+        EX:
+        1. youtube.com/watch?v={11 random string)
+        2. youtu.be/{11 random string}
+
+        Is all we really need I believe
+        """
+        if re.search('(https:\/\/)?(www\.)?youtube\.com\/watch\?v=[a-zA-Z0-9]{11}$|(https:\/\/)?(www\.)?youtu\.be\/[a-zA-Z0-9]{11}', url):
+            return True
+        return False
 
     # Gets video name from video id
     def get_video_name(self, url):
@@ -40,7 +58,7 @@ class YoutubeToolkit:
             video_id = query['v'][0]
         return video_id
 
-    # Retruns a list of comments in array format
+    # Returns a list of comments in array format
 
     """
     * API HERE: https://developers.google.com/youtube/v3/docs/search/list
@@ -113,6 +131,11 @@ class YoutubeToolkit:
 
 
 if __name__ == '__main__':
+    print(urlparse('https://www.youtube.com/watch?v=3'))
+    print(urlparse('www.youtube.com/watch?v=p44HlRMSKf8'))
+    print(urlparse('youtube.com/watch?v=3'))
+    print(urlparse('youtu.be/p44HlRMSKf8'))
     yt = YoutubeToolkit()
     yt.get_topic_list('dog')
     print(yt.get_video_name("https://www.youtube.com/watch?v=YCzgnzWK_r0"))
+    print(urlparse('https://youtu.be/p44HlRMSKf8'))
