@@ -193,3 +193,13 @@ if __name__ == '__main__':
         main.start_chat()
     """
     main.establish_topic()
+
+
+"""
+    with open('test.p', 'wb') as f:
+        pickle.dump(user, f)
+
+def load_user():
+    with open('test.p', 'rb') as f:
+        user = pickle.load(f)
+"""
