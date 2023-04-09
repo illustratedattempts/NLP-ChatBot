@@ -91,8 +91,46 @@ class Main:
 
             # We KNOW that the URL is not correct or THEY chose to enter a topic instead
             user_input = input()
+    
+    # Input: YouTube link
+    def start_chat(self, link):
+        # Get the comments from the video
+        comments = self.yt.comment_finder(link)
+        # clean_comments type list
+        clean_comments = self.nlp.clean_text_array(comments)
+        comment_freq = self.nlp.word_frequency(clean_comments)
 
-    def start_chat(self):
+        # Setup chatbot to discuss current video
+        # Give the chatbot the title of the video
+        self.message_log.append(
+            {"role": "system", "content": "You are a bot that pretends to give analysis on Youtube videos."})
+        self.message_log.append({"role": "system",
+                                    "content": "You do not need to have knowledge on the videos, just give an analysis based on sentiment score and title."})
+        self.message_log.append({"role": "system",
+                                    "content": "Also, try to utilize keywords that relate to the video in your response."})
+        title_message = "The video you are currently discussing is called " + self.yt.get_video_name(link)
+        self.message_log.append({"role": "system", "content": title_message})
+
+        # Give the chatbot the sentiment analysis of the comments
+        sentiment_score = self.nlp.sentiment_analysis(" ".join(comments))
+        sentiment_message = "The video you are currently discussing has a sentiment score of " + str(
+            sentiment_score[0]) + " percent negative, " + str(sentiment_score[1]) + " percent neutral, and " + str(
+            sentiment_score[2]) + " percent positive."
+        self.message_log.append({"role": "system", "content": sentiment_message})
+
+        # Give the chatbot the most frequent words in order
+        common_words = []
+        for key, value in sorted(comment_freq.items(), key=lambda x: x[1], reverse=True):
+            common_words.append(key)
+
+        # Send the bot the 100 most common words
+        common_words_message = "The most common words commented under the video are "
+        for i in range(0, min(len(common_words), 100)):
+            common_words_message += common_words[i] + " "
+        self.message_log.append({"role": "system", "content": common_words_message})
+        self.regular_chat()
+        
+    def establish_topic(self):
         print("YouTube Bot: Hello! I am YouTube bot.")
         print("YouTube Bot: What's your name?\n")
         self.user_name = input("User: ")
@@ -103,41 +141,7 @@ class Main:
         # If user's next message is a URL
         #  (we are currently assuming YouTube URL is sent)
         if self.yt.verify_url(discussion):
-            # Get the comments from the video
-            comments = self.yt.comment_finder(discussion)
-            # clean_comments type list
-            clean_comments = self.nlp.clean_text_array(comments)
-            comment_freq = self.nlp.word_frequency(clean_comments)
-
-            # Setup chatbot to discuss current video
-            # Give the chatbot the title of the video
-            self.message_log.append(
-                {"role": "system", "content": "You are a bot that pretends to give analysis on Youtube videos."})
-            self.message_log.append({"role": "system",
-                                     "content": "You do not need to have knowledge on the videos, just give an analysis based on sentiment score and title."})
-            self.message_log.append({"role": "system",
-                                     "content": "Also, try to utilize keywords that relate to the video in your response."})
-            title_message = "The video you are currently discussing is called " + self.yt.get_video_name(discussion)
-            self.message_log.append({"role": "system", "content": title_message})
-
-            # Give the chatbot the sentiment analysis of the comments
-            sentiment_score = self.nlp.sentiment_analysis(" ".join(comments))
-            sentiment_message = "The video you are currently discussing has a sentiment score of " + str(
-                sentiment_score[0]) + " percent negative, " + str(sentiment_score[1]) + " percent neutral, and " + str(
-                sentiment_score[2]) + " percent positive."
-            self.message_log.append({"role": "system", "content": sentiment_message})
-
-            # Give the chatbot the most frequent words in order
-            common_words = []
-            for key, value in sorted(comment_freq.items(), key=lambda x: x[1], reverse=True):
-                common_words.append(key)
-
-            # Send the bot the 100 most common words
-            common_words_message = "The most common words commented under the video are "
-            for i in range(0, min(len(common_words), 100)):
-                common_words_message += common_words[i] + " "
-            self.message_log.append({"role": "system", "content": common_words_message})
-            self.regular_chat()
+            self.start_chat(discussion)
         else:  # TOPIC SEARCH
             videos_id_arr, videos_title_arr = self.yt.get_topic_list(discussion)
 
@@ -148,11 +152,14 @@ class Main:
             selected_vid_index = int(input())  # ASSUMES that the result is the index
             selected_vid_index = selected_vid_index - 1
 
-            video_link = "https://www.youtube.com/watch?v=" + videos_id_arr[selected_vid_index]
+            video_link = videos_id_arr[selected_vid_index]
+            self.start_chat(video_link)
 
     def regular_chat(self):
         self.message_log.append(
             {"role": "system", "content": "Generate your first response, given the information above."})
+        self.message_log.append({
+            "role": "system", "content": "After the user responds, continue the conversaion how ChatGPT normally would"})
         bot_message = self.chat.generate_message(self.message_log)
         while (True):
             print("\nYouTube Bot:", bot_message, "\n")
@@ -170,4 +177,4 @@ if __name__ == '__main__':
     else:
         main.start_chat()
     """
-    main.check_if_first()
+    main.establish_topic()
