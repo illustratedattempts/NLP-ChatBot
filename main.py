@@ -6,7 +6,7 @@ from User import User
 import os
 import pickle
 import re
-
+import textwrap
 
 class Main:
     def __init__(self):
@@ -32,6 +32,11 @@ class Main:
         if not self.check_if_history_exists():
             print("Youtube Bot: What's your name?")
             self.user_name = input("User: ")
+            """
+            if self.user_name == '!exit':
+                print("Thanks for talking to Youtube Bot :)")
+                exit(0)
+            """
             print("Youtube Bot: Hello ", self.user_name, "!", sep='')
             self.user_data = User(self.user_name)
             with open('chat_data.p', 'wb') as f:
@@ -49,11 +54,12 @@ class Main:
 
     def looping_functionality(self):
         print("Youtube Bot: What do you want to discuss?")
-        while True:            
+        while True:
             video_link, video_title = self.topic_verification()  # Will ALWAYS be FORCED to return THIS UNLESS
             while True:  # Confirmation
                 print("Youtube Bot: Are you sure you want to look at {}? (Y/N)".format(video_title))
-                confirmation_input = input("{}: ".format(self.user_name)).lower()  # @TODO Need to make it all either caps or lower case [DONE]
+                confirmation_input = input(
+                    "{}: ".format(self.user_name)).lower()  # @TODO Need to make it all either caps or lower case [DONE]
                 if confirmation_input == 'y' or confirmation_input == 'yes':
                     break
                 elif confirmation_input == 'n' or confirmation_input == 'no':
@@ -64,15 +70,15 @@ class Main:
 
             # Prompt to store LIKES/DISLIKES
             self.get_user_likes_and_dislikes(video_title)
-            
+
             # Assign the chatbot configs using video link
             self.chatbot_configs(video_link)
-            
+
             # Freed chatbot
             self.freed_chatbot()
-            
+
             print("Youtube Bot: What else would you like to discuss?")
-            
+
             # @TODO Store user likes/dislikes somehow
             # exiting the ENTIRE PROGRAM after this
 
@@ -96,7 +102,8 @@ class Main:
 
                 print("Youtube Bot: Please Pick a Video From The Following Listed Below.")
                 for num in range(len(videos_title_arr)):
-                    print(str(num + 1) + '. ' + videos_title_arr[num])
+                    print(str(num + 1) + '. ' + videos_title_arr[num] + ' | ' + videos_link_arr[num])
+
                 print("Youtube Bot: Please enter the video integer number.")
 
                 while True:  # Continuous checks to see if the input is correct
@@ -113,18 +120,18 @@ class Main:
 
             # We KNOW that the URL is not correct or THEY chose to enter a topic instead
             user_input = input("{}: ".format(self.user_name))
-    
+
     def get_user_likes_and_dislikes(self, video_title):
-        print("Youtube Bot: What do you like about {}?".format(video_title))
+        print("Youtube Bot: What do you like about: {}?".format(video_title))
         user_likes = input("{}: ".format(self.user_name))
         self.user_data.add_like = user_likes
-        #print("Youtube Bot: Okay.")
+        # print("Youtube Bot: Okay.")
         print("Youtube Bot: What do you dislike about {}?".format(video_title))
         user_dislikes = input("{}: ".format(self.user_name))
         self.user_data.add_dislike = user_dislikes
         with open('chat_data.p', 'wb') as f:
             pickle.dump(self.user_data, f)
-    
+
     def chatbot_configs(self, link):
         # Get the comments from the video
         comments = self.yt.comment_finder(link)
@@ -163,29 +170,29 @@ class Main:
         self.message_log.append(
             {"role": "system", "content": "Generate your first response, given the information above."})
         self.message_log.append({
-            "role": "system", "content": "After the user responds, continue the conversaion how ChatGPT normally would"})
+            "role": "system",
+            "content": "After the user responds, continue the conversation how ChatGPT normally would"})
         bot_message = self.chat.generate_message(self.message_log)
-        print("\nYouTube Bot:", bot_message, "\n")
+        print("YouTube Bot:", textwrap.fill(bot_message, 30))
         return
-        
+
     def freed_chatbot(self):
-        while (True):
+        while True:
             user_msg = input("{}: ".format(self.user_name))
             if user_msg == "!newtopic":
                 self.ask_user_thoughts()
                 return
             self.message_log.append({"role": "user", "content": user_msg})
             bot_message = self.chat.generate_message(self.message_log)
-            print("\nYouTube Bot:", bot_message, "\n")
-    
-        
+            print("YouTube Bot:", textwrap.fill(bot_message, 40))
+
     def ask_user_thoughts(self):
         bot_message = self.chat.generate_thoughts(self.user_data.previous_msg_list)
-        print("\nYouTube Bot: ", bot_message, "\n")
+        print("YouTube Bot: ", bot_message)
         self.user_data.add_previous_msg_list(bot_message)
         user_thoughts = input("{}: ".format(self.user_name))
         self.user_data.add_thoughts(user_thoughts)
-        print("Youtube Bot: Thank you for the insight!\n")
+        print("Youtube Bot: Thank you for the insight!")
         with open('chat_data.p', 'wb') as f:
             pickle.dump(self.user_data, f)
         return
@@ -197,8 +204,8 @@ class Main:
             "role": "system",
             "content": "After the user responds, continue the conversaion how ChatGPT normally would"})
         bot_message = self.chat.generate_message(self.message_log)
-        while (True):
-            print("\nYouTube Bot:", bot_message, "\n")
+        while True:
+            print("YouTube Bot:", textwrap.fill(bot_message, 30))
             user_msg = input("{}: ".format(self.user_name))
             self.message_log.append({"role": "user", "content": user_msg})
             bot_message = self.chat.generate_message(self.message_log)

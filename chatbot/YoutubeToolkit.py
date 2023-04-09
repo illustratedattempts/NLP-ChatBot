@@ -34,7 +34,7 @@ class YoutubeToolkit:
 
         Is all we really need I believe
         """
-        if re.search('(https:\/\/)?(www\.)?youtube\.com\/watch\?v=[a-zA-Z0-9]{11}$|(https:\/\/)?(www\.)?youtu\.be\/[a-zA-Z0-9]{11}', url):
+        if re.search('(https:\/\/)?(www\.)?youtube\.com\/watch\?v=[a-zA-Z0-9\-\_]{11}$|(https:\/\/)?(www\.)?youtu\.be\/[a-zA-Z0-9\-\_]{11}', url):
             return True
         return False
 
@@ -93,7 +93,6 @@ class YoutubeToolkit:
     def comment_finder(self, url):
         # Parse the URL using URLParse
         parsed_url = urlparse(url)
-
         # Verify URL is YouTube link
         if not self.verify_url(url):
             print("Error trying to verify URL is YouTube link")

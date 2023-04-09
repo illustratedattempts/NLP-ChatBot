@@ -9,7 +9,6 @@ class NLPTechniques:
     # Cleans the list of comments
     def clean_text_array(self, comment_list):
         clean_arr = []
-        print("COMMENT LIST:", len(comment_list))
         for comment in comment_list:
             clean_text = self.clean_text(comment)
             if len(clean_text) > 2:
