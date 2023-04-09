@@ -18,39 +18,38 @@ class Main:
         self.message_log = []
         self.user_data = None
 
-    def check_if_first_instance(self):
+    def check_if_history_exists(self):
         files_list = os.listdir('./')  # Get List of Files/Directories in Directory | Can be changed to look at
         # different places [LATER]
-        pickle_file_exists = False
         for file in files_list:
-            if '.p' in file:  # Check if any file has the .p extension
+            if file.endswith('.p'):  # Check if any file has the .p extension
                 self.prev_user_log = file
-                pickle_file_exist = True
-                break
-
-        return pickle_file_exist
+                return True
+        return False
 
     def main_chat(self):
         # We check if this is a new chat instance
-        if self.check_if_first_instance():
+        if not self.check_if_history_exists():
             print("Youtube Bot: What's your name?")
             self.user_name = input("User: ")
             print("Youtube Bot: Hello ", self.user_name, "!", sep='')
             self.user_data = User(self.user_name)
+            with open('chat_data.p', 'wb') as f:
+                pickle.dump(self.user_data, f)
         else:  # User Data already exists in the directory
             if self.prev_user_log is None:
                 print("ERROR!")
                 return
             else:
-                self.user_data = pickle.load(open(self.prev_user_log), 'rb')
+                with open(self.prev_user_log, 'rb') as p:
+                    self.user_data = pickle.load(p)
                 self.user_name = self.user_data.name  # Need to unpack the user_data username properly
                 print("Youtube Bot: Hello, " + self.user_name)
         self.looping_functionality()
 
     def looping_functionality(self):
-        while True:
-            print("Youtube Bot: What do you want to discuss?")  # Could have variational ways of saying the same thing
-            
+        print("Youtube Bot: What do you want to discuss?")
+        while True:            
             video_link, video_title = self.topic_verification()  # Will ALWAYS be FORCED to return THIS UNLESS
             while True:  # Confirmation
                 print("Youtube Bot: Are you sure you want to look at {}? (Y/N)".format(video_title))
@@ -65,15 +64,14 @@ class Main:
 
             # Prompt to store LIKES/DISLIKES
             self.get_user_likes_and_dislikes(video_title)
-
-            # Prompt to store LIKES/DISLIKES
-            self.get_user_likes_and_dislikes(video_title)
             
             # Assign the chatbot configs using video link
             self.chatbot_configs(video_link)
             
             # Freed chatbot
             self.freed_chatbot()
+            
+            print("Youtube Bot: What else would you like to discuss?")
             
             # @TODO Store user likes/dislikes somehow
             # exiting the ENTIRE PROGRAM after this
@@ -124,6 +122,8 @@ class Main:
         print("Youtube Bot: What do you dislike about {}?".format(video_title))
         user_dislikes = input("{}: ".format(self.user_name))
         self.user_data.add_dislike = user_dislikes
+        with open('chat_data.p', 'wb') as f:
+            pickle.dump(self.user_data, f)
     
     def chatbot_configs(self, link):
         # Get the comments from the video
@@ -186,6 +186,8 @@ class Main:
         user_thoughts = input("{}: ".format(self.user_name))
         self.user_data.add_thoughts(user_thoughts)
         print("Youtube Bot: Thank you for the insight!\n")
+        with open('chat_data.p', 'wb') as f:
+            pickle.dump(self.user_data, f)
         return
 
     def regular_chat(self):
@@ -204,24 +206,4 @@ class Main:
 
 if __name__ == '__main__':
     main = Main()
-    # Check if history file is provided
-    """
-    if len(sys.argv) == 2:
-        main.load_history()
-    else:
-        main.start_chat()
-    """
-    main.establish_topic()
-
-
-"""
-    with open('test.p', 'wb') as f:
-        pickle.dump(user, f)
-
-def load_user():
-    with open('test.p', 'rb') as f:
-        user = pickle.load(f)
-"""
-    # main.establish_topic()
-    # print(main.check_if_first_instance())
-    #print(main.looping_functionality())
+    main.main_chat()

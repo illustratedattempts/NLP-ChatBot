@@ -17,7 +17,7 @@ class Chatbot:
         return message.choices[0].message.content
 
     def generate_thoughts(self, previous_asked):
-        message = openai.Completion.create(
+        message = openai.ChatCompletion.create(
             model = "gpt-3.5-turbo",
             messages = [
                 {"role": "system",
@@ -26,6 +26,6 @@ class Chatbot:
                  "content": "Avoid using the ways you've previously asked before: "},
                 {"role": "system",
                  "content": " ".join(previous_asked)}
-            ]
+            ],
         )
         return message.choices[0].message.content
