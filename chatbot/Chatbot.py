@@ -15,3 +15,17 @@ class Chatbot:
             max_tokens = 1024
         )
         return message.choices[0].message.content
+
+    def generate_thoughts(self, previous_asked):
+        message = openai.Completion.create(
+            model = "gpt-3.5-turbo",
+            messages = [
+                {"role": "system",
+                 "content" : "Create a message asking `What did you think about our conversation?`"},
+                {"role": "system",
+                 "content": "Avoid using the ways you've previously asked before: "},
+                {"role": "system",
+                 "content": " ".join(previous_asked)}
+            ]
+        )
+        return message.choices[0].message.content

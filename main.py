@@ -2,6 +2,7 @@ import sys
 from chatbot.Chatbot import Chatbot
 from chatbot.YoutubeToolkit import YoutubeToolkit
 from chatbot.NLPTechniques import NLPTechniques
+from User import User
 import os
 import pickle
 import re
@@ -15,6 +16,7 @@ class Main:
         self.nlp = NLPTechniques()
         self.user_name = ""
         self.message_log = []
+        self.user_data = None
 
     def check_if_first_instance(self):
         files_list = os.listdir('./')  # Get List of Files/Directories in Directory | Can be changed to look at
@@ -34,13 +36,14 @@ class Main:
             print("Youtube Bot: What's your name?")
             self.user_name = input("User: ")
             print("Youtube Bot: Hello ", self.user_name, "!", sep='')
+            self.user_data = User(self.user_name)
         else:  # User Data already exists in the directory
             if self.prev_user_log is None:
                 print("ERROR!")
                 return
             else:
-                user_data = pickle.load(open(self.prev_user_log), 'rb')
-                self.user_name = "Something Here :>"  # Need to unpack the user_data username properly
+                self.user_data = pickle.load(open(self.prev_user_log), 'rb')
+                self.user_name = self.user_data.name  # Need to unpack the user_data username properly
                 print("Youtube Bot: Hello, " + self.user_name)
         self.looping_functionality()
 
@@ -52,18 +55,21 @@ class Main:
             while True:
                 video_link, video_title = self.topic_verification()  # Will ALWAYS be FORCED to return THIS UNLESS
                 print("Youtube Bot: ARE YOU SURE THIS IS THE VIDEO YOU WANT TO DISCUSS?(Y/N) {}".format(video_title))
-                confirmation_input = input()  # @TODO Need to make it all either caps or lower case
+                confirmation_input = input("{}: ".format(self.user_name))  # @TODO Need to make it all either caps or lower case
                 if confirmation_input == 'Y':
                     break
+            # Prompt to store LIKES/DISLIKES
+            self.get_user_likes_and_dislikes(video_title)
 
             # Prompt to store LIKES/DISLIKES
-            print("Youtube Bot: What do you like about {}?".format(video_title))
-            user_likes = input()
-            print("Youtube Bot: Okay.")
-            print("Youtube Bot: What do you dislike about {}?".format(video_title))
-            user_dislikes = input()
-            # @TODO Store user likes/dislikes somehow
-            # exiting the ENTIRE PROGRAM after this
+            self.get_user_likes_and_dislikes(video_title)
+            
+            # Assign the chatbot configs using video link
+            self.chatbot_configs(video_link)
+            
+            # Freed chatbot
+            self.freed_chatbot()
+            
 
     def topic_verification(self):
         """
@@ -71,7 +77,7 @@ class Main:
         Otherwise, we immediately assume it's a topic.
         """
         print("Youtube Bot: Please enter JUST the topic or link.")
-        user_input = input()
+        user_input = input("{}: ".format(self.user_name))
         while True:
             if re.search("youtu.be\/|youtube.com\/|https", user_input):  # Check if the user's input has a link
                 if self.yt.verify_url(user_input):  # Verify the URL works
@@ -85,15 +91,23 @@ class Main:
                 for num in range(len(videos_title_arr)):
                     print(str(num + 1) + '. ' + videos_title_arr[num])
                 print("Enter the Number: ", end='')
-                selected_vid_index = int(input())  # ASSUMES that the result is the index
+                selected_vid_index = int(input("{}: ".format(self.user_name)))  # ASSUMES that the result is the index
                 selected_vid_index = selected_vid_index - 1
                 return videos_link_arr[selected_vid_index], videos_title_arr[selected_vid_index]
 
             # We KNOW that the URL is not correct or THEY chose to enter a topic instead
-            user_input = input()
+            user_input = input("{}: ".format(self.user_name))
     
-    # Input: YouTube link
-    def start_chat(self, link):
+    def get_user_likes_and_dislikes(self, video_title):
+        print("Youtube Bot: What do you like about {}?".format(video_title))
+        user_likes = input("{}: ".format(self.user_name))
+        self.user_data.add_like = user_likes
+        #print("Youtube Bot: Okay.")
+        print("Youtube Bot: What do you dislike about {}?".format(video_title))
+        user_dislikes = input("{}: ".format(self.user_name))
+        self.user_data.add_dislike = user_dislikes
+    
+    def chatbot_configs(self, link):
         # Get the comments from the video
         comments = self.yt.comment_finder(link)
         # clean_comments type list
@@ -128,32 +142,33 @@ class Main:
         for i in range(0, min(len(common_words), 100)):
             common_words_message += common_words[i] + " "
         self.message_log.append({"role": "system", "content": common_words_message})
-        self.regular_chat()
+        self.message_log.append(
+            {"role": "system", "content": "Generate your first response, given the information above."})
+        self.message_log.append({
+            "role": "system", "content": "After the user responds, continue the conversaion how ChatGPT normally would"})
+        bot_message = self.chat.generate_message(self.message_log)
+        print("\nYouTube Bot:", bot_message, "\n")
+        return
         
-    def establish_topic(self):
-        print("YouTube Bot: Hello! I am YouTube bot.")
-        print("YouTube Bot: What's your name?\n")
-        self.user_name = input("User: ")
-        print("\nYouTube Bot: Hello ", self.user_name, "!", sep='')
-        print("YouTube Bot: What do you want to discuss? Feel free to send a link or topic.\n")
-        discussion = input("{}: ".format(self.user_name))
+    def freed_chatbot(self):
+        while (True):
+            user_msg = input("{}: ".format(self.user_name))
+            if user_msg == "!newtopic":
+                self.ask_user_thoughts()
+                return
+            self.message_log.append({"role": "user", "content": user_msg})
+            bot_message = self.chat.generate_message(self.message_log)
+            print("\nYouTube Bot:", bot_message, "\n")
+    
         
-        # If user's next message is a URL
-        #  (we are currently assuming YouTube URL is sent)
-        if self.yt.verify_url(discussion):
-            self.start_chat(discussion)
-        else:  # TOPIC SEARCH
-            videos_id_arr, videos_title_arr = self.yt.get_topic_list(discussion)
-
-            print("Please Pick a Video From The Following:")
-            for num in range(len(videos_title_arr)):
-                print(str(num + 1) + '. ' + videos_title_arr[num])
-            print("Enter the Number: ", end='')
-            selected_vid_index = int(input())  # ASSUMES that the result is the index
-            selected_vid_index = selected_vid_index - 1
-
-            video_link = videos_id_arr[selected_vid_index]
-            self.start_chat(video_link)
+    def ask_user_thoughts(self):
+        bot_message = self.chat.generate_thoughts(self.user_data.previous_msg_list)
+        print("\nYouTube Bot: ", bot_message, "\n")
+        self.user_data.add_previous_msg_list(bot_message)
+        user_thoughts = input("{}: ".format(self.user_name))
+        self.user_data.add_thoughts(user_thoughts)
+        print("Youtube Bot: Thank you for the insight!\n")
+        return
 
     def regular_chat(self):
         self.message_log.append(
