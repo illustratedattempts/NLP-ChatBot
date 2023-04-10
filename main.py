@@ -27,6 +27,7 @@ class Main:
             if file.endswith('.p'):  # Check if any file has the .p extension
                 self.prev_user_log = file
                 return True
+        os.system("python requirements.py")
         return False
 
     def main_chat(self):
