@@ -9,6 +9,17 @@ class YoutubeToolkit:
         load_dotenv("api_keys.env")
         youtube_api_key = os.getenv("YOUTUBE_API_KEY")
         self.youtube = build('youtube', 'v3', developerKey=youtube_api_key)
+        
+    def verify_comments_enabled(self, video_id):
+        try:
+            comment_response = self.youtube.commentThreads().list(
+                part='snippet',
+                videoId=video_id,
+                maxResults=100
+            ).execute()
+            return True
+        except:
+            return False
 
     # Verifies the link provided is from YouTube
     def verify_url(self, url):
@@ -110,11 +121,17 @@ class YoutubeToolkit:
             print("Video not found given ID")
             return
 
-        comment_response = self.youtube.commentThreads().list(
-            part='snippet',
-            videoId=video_id,
-            maxResults=100
-        ).execute()
+        try:
+            comment_response = self.youtube.commentThreads().list(
+                part='snippet',
+                videoId=video_id,
+                maxResults=100
+            ).execute()
+        except:
+            print("Creator disabled comment scraping on this video")
+            return
+
+
 
         # Verify that there are comments under video
         if comment_response['pageInfo']['totalResults'] == 0:

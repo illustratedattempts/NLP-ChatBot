@@ -8,6 +8,7 @@ import pickle
 import re
 import textwrap
 import html
+from urllib.parse import urlparse, parse_qs
 
 class Main:
     def __init__(self):
@@ -102,9 +103,15 @@ class Main:
         while True:
             if re.search("youtu.be\/|youtube.com\/|https", user_input):  # Check if the user's input has a link
                 if self.yt.verify_url(user_input):  # Verify the URL works
+                    if not self.yt.verify_comments_enabled(self.yt.get_video_id(urlparse(user_input))):
+                        print("Youtube Bot: It seems like the video you've chosen has comment scraping disabled. Please pick another.")
+                        user_input = input("{}: ".format(self.user_name))
+                        continue
                     return user_input, self.yt.get_video_name(user_input)
                 else:
                     print("Youtube Bot: WHOOPS. Your URL does not seem to work. Please try again or enter a topic.")
+                    print("Youtube Bot: Please ensure the link does not contain timestamps or anything after the Video ID.")
+                    user_input = input("{}: ".format(self.user_name))
             else:  # VIDEO SEARCH FROM TOPIC
                 videos_link_arr, videos_title_arr = self.yt.get_topic_list(user_input)
 
@@ -123,17 +130,15 @@ class Main:
                         selected_vid_index = int(selected_vid_index)
                         if 0 < selected_vid_index < 6:  # Checks if in the range of 1, 5 inclusive
                             selected_vid_index = selected_vid_index - 1
+                            if not self.yt.verify_comments_enabled(self.yt.get_video_id(urlparse(videos_link_arr[selected_vid_index]))):
+                                print("Youtube Bot: It seems like the video you've chosen has comment scraping disabled. Please pick another topic.")
+                                break
                             return videos_link_arr[selected_vid_index], videos_title_arr[selected_vid_index]
                         else:
                             print("Youtube Bot: Please enter a listed video number. ")
                     else:
                         print("Youtube Bot: Please enter an INTEGER number.")
-
-            # We KNOW that the URL is not correct or THEY chose to enter a topic instead
-            user_input = input("{}: ".format(self.user_name))
-            if user_input == '!exit':
-                print("Thanks for talking to Youtube Bot :)")
-                exit(0)
+            
 
     def get_user_likes_and_dislikes(self, video_title):
         video_title_unescape = html.unescape(video_title)
@@ -170,6 +175,14 @@ class Main:
                                  "content": "Also, try to utilize keywords that relate to the video in your response."})
         title_message = "The video you are currently discussing is called " + self.yt.get_video_name(link)
         self.message_log.append({"role": "system", "content": title_message})
+        
+        # Give the user feedback on the video
+        user_likes = "The user likes this about the video " + self.user_data.likes[-1]
+        user_dislikes = "The user does not like this about the video " + self.user_data.dislikes[-1]
+        self.message_log.append(
+            {"role": "system", "content": user_likes})
+        self.message_log.append(
+            {"role": "system", "content": user_dislikes})
 
         # Give the chatbot the sentiment analysis of the comments
         sentiment_score = self.nlp.sentiment_analysis(" ".join(comments))
