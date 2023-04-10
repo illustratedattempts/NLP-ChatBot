@@ -147,14 +147,14 @@ class Main:
         if user_likes == '!exit':
             print("Thanks for talking to Youtube Bot :)")
             exit(0)
-        self.user_data.add_like = user_likes
+        self.user_data.likes.append(user_likes)
         # print("Youtube Bot: Okay.")
         print("Youtube Bot: What do you dislike about {}?".format(video_title_unescape))
         user_dislikes = input("{}: ".format(self.user_name))
         if user_dislikes == '!exit':
             print("Thanks for talking to Youtube Bot :)")
             exit(0)
-        self.user_data.add_dislike = user_dislikes
+        self.user_data.dislikes.append(user_dislikes)
         with open('chat_data.p', 'wb') as f:
             pickle.dump(self.user_data, f)
 
@@ -203,15 +203,19 @@ class Main:
         self.message_log.append({"role": "system", "content": common_words_message})
         self.message_log.append(
             {"role": "system", "content": "Generate your first response, given the information above."})
-        self.message_log.append({
-            "role": "system",
-            "content": "After the user responds, continue the conversation how ChatGPT normally would"})
         bot_message = self.chat.generate_message(self.message_log)
+        self.message_log.append({
+            "role": "assistant",
+            "content": bot_message
+        })
         print("YouTube Bot:", textwrap.fill(bot_message, 60))
         return
 
     def freed_chatbot(self):
         new_topic_prompt = False
+        self.message_log.append({
+            "role": "system",
+            "content": "Continue the conversation about the topic above!"})
         while True:
             user_msg = input("{}: ".format(self.user_name))
             if user_msg == '!exit':
@@ -222,6 +226,7 @@ class Main:
                 return
             self.message_log.append({"role": "user", "content": user_msg})
             bot_message = self.chat.generate_message(self.message_log)
+            self.message_log.append({"role": "assistant", "content": bot_message})
             print("YouTube Bot:", textwrap.fill(bot_message, 60))
             if not new_topic_prompt:
                 print("Youtube Bot: **If you want to change the topic, just say `!newtopic`**")
