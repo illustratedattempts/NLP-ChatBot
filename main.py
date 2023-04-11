@@ -124,7 +124,7 @@ class Main:
                 for num in range(len(videos_title_arr)):
                     print(str(num + 1) + '. ' + html.unescape(videos_title_arr[num]) + ' | ' + videos_link_arr[num])
 
-                print("Youtube Bot: Please enter the video integer number.\n")
+                print("\nYoutube Bot: Please enter the video integer number.\n")
 
                 while True:  # Continuous checks to see if the input is correct
                     selected_vid_index = input("{}: ".format(self.user_name))
