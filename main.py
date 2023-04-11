@@ -3,12 +3,12 @@ from chatbot.Chatbot import Chatbot
 from chatbot.YoutubeToolkit import YoutubeToolkit
 from chatbot.NLPTechniques import NLPTechniques
 from User import User
-import os
 import pickle
 import re
 import textwrap
 import html
 from urllib.parse import urlparse, parse_qs
+import os
 
 class Main:
     def __init__(self):
@@ -27,7 +27,6 @@ class Main:
             if file.endswith('.p'):  # Check if any file has the .p extension
                 self.prev_user_log = file
                 return True
-        os.system("python requirements.py")
         return False
 
     def main_chat(self):
@@ -37,7 +36,7 @@ class Main:
             potential_user_name = input("User: ")
             if potential_user_name == '!exit':
                 print("Thanks for talking to Youtube Bot :)")
-                exit(0)
+                sys.exit(0)
             else:
                 self.user_name = potential_user_name
             print("Youtube Bot: Hello ", self.user_name, "!", sep='')
@@ -66,7 +65,7 @@ class Main:
                     "{}: ".format(self.user_name)).lower()  # @TODO Need to make it all either caps or lower case [DONE]
                 if confirmation_input == '!exit':
                     print("Thanks for talking to Youtube Bot :)")
-                    exit(0)
+                    sys.exit(0)
                 if confirmation_input == 'y' or confirmation_input == 'yes':
                     break
                 elif confirmation_input == 'n' or confirmation_input == 'no':
@@ -100,7 +99,7 @@ class Main:
         user_input = input("{}: ".format(self.user_name))
         if user_input == '!exit':
             print("Thanks for talking to Youtube Bot :)")
-            exit(0)
+            sys.exit(0)
         while True:
             if re.search("youtu.be\/|youtube.com\/|https", user_input):  # Check if the user's input has a link
                 if self.yt.verify_url(user_input):  # Verify the URL works
@@ -126,7 +125,7 @@ class Main:
                     selected_vid_index = input("{}: ".format(self.user_name))
                     if selected_vid_index == '!exit':
                         print("Thanks for talking to Youtube Bot :)")
-                        exit(0)
+                        sys.exit(0)
                     if selected_vid_index.isdigit():
                         selected_vid_index = int(selected_vid_index)
                         if 0 < selected_vid_index < 6:  # Checks if in the range of 1, 5 inclusive
@@ -147,14 +146,14 @@ class Main:
         user_likes = input("{}: ".format(self.user_name))
         if user_likes == '!exit':
             print("Thanks for talking to Youtube Bot :)")
-            exit(0)
+            sys.exit(0)
         self.user_data.likes.append(user_likes)
         # print("Youtube Bot: Okay.")
         print("Youtube Bot: What do you dislike about {}?".format(video_title_unescape))
         user_dislikes = input("{}: ".format(self.user_name))
         if user_dislikes == '!exit':
             print("Thanks for talking to Youtube Bot :)")
-            exit(0)
+            sys.exit(0)
         self.user_data.dislikes.append(user_dislikes)
         with open('chat_data.p', 'wb') as f:
             pickle.dump(self.user_data, f)
@@ -221,7 +220,7 @@ class Main:
             user_msg = input("{}: ".format(self.user_name))
             if user_msg == '!exit':
                 print("Thanks for talking to Youtube Bot :)")
-                exit(0)
+                sys.exit(0)
             if user_msg == "!newtopic":
                 self.ask_user_thoughts()
                 return
@@ -240,7 +239,7 @@ class Main:
         user_thoughts = input("{}: ".format(self.user_name))
         if user_thoughts == '!exit':
             print("Thanks for talking to Youtube Bot :)")
-            exit(0)
+            sys.exit(0)
         self.user_data.add_thoughts(user_thoughts)
         print("Youtube Bot: Thank you for the insight!")
         with open('chat_data.p', 'wb') as f:
@@ -259,7 +258,7 @@ class Main:
             user_msg = input("{}: ".format(self.user_name))
             if user_msg == '!exit':
                 print("Thanks for talking to Youtube Bot :)")
-                exit(0)
+                sys.exit(0)
             self.message_log.append({"role": "user", "content": user_msg})
             bot_message = self.chat.generate_message(self.message_log)
 
