@@ -8,7 +8,7 @@ class YoutubeToolkit:
     def __init__(self):
         load_dotenv("api_keys.env")
         youtube_api_key = os.getenv("YOUTUBE_API_KEY")
-        self.youtube = build('youtube', 'v3', developerKey=youtube_api_key)
+        self.youtube = build('youtube', 'v3', developerKey=youtube_api_key, static_discovery=False)
         
     def verify_comments_enabled(self, video_id):
         try:
