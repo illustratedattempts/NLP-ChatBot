@@ -1,62 +1,13 @@
-**Alejo Vinluan (abv210001)**	**Thanh Vo (ttv170230)**
+## Alejo Vinluan (abv210001)**	
 
 
-```
-CHATBOT FINAL REPORT
-```
+## Thanh Vo (ttv170230)
 
 
+# CHATBOT FINAL REPORT
+  
 
-# 
-
-
-# **Index**
-
-**1. **Overview..............................................................	_Page 3_
-
-**2. **System Description..............................................	_Page 4_
-
-
-
-1. Youtube Chatbot Version 1……………………...	_Page 4_
-2. Youtube Chatbot Version 2……………………...**_	Page 6_**
-3. Youtube Chatbot Version 3……………………...**_	Page 7_**
-
-**3. **Explanation on Subdivision of Components........._Page 8_
-
-
-
-1. main_chat…………………………………………	_Page 8_
-2. check_if_first_instance…………………………..	_Page 8_
-3. looping_functionality……………………………..	_Page 9_
-4. topic_verification………………………………….	_Page 9_
-5. chatbot_configs…………………………………._	Page 11_
-6. freed_chatbot……………………………………	_Page 12_
-
-**4. **NLP Techniques.................................................**	_Page 12_**
-
-
-
-1. Clean Text……………………………………….	_Page 12_
-2. Word Frequency………………………………...	_Page 12_
-3. Sentiment Analysis……………………………..	_Page 13_
-
-**5. **Live Lookup of the Data (Knowledge Base).......	_Page 14_
-
-**6. **User Models.......................................................	_Page 15_
-
-**7. **Analysis of the Chatbot......................................	_Page 16_
-
-
-
-1. Strengths………………………………………...	_Page 16_
-2. Weaknesses…………………………………….	_Page 16_
-3. Overall Analysis…………………………………	_Page 17_
-
-# 
-    
-
-1. **Overview**
+##** 1. Overview**
 
 	The goal of this assignment was to create a Chatbot while utilizing NLP techniques that were learned in class. The Chatbot must carry on a conversation within the domain while using knowledge from the user and knowledge from the web.
 
@@ -66,253 +17,121 @@ CHATBOT FINAL REPORT
 
 
 
-2. **System Description**
+##**2. System Description**
 
 	The system went through multiple iterations before we made our final Chatbot. In the most abstract sense, the system involves 3 main steps: Initial User Inquiry, Gathering Information, and Response Generation.
-
-
-## 
-    **2a. Youtube Chatbot Version 1**
-
-
-
-<p id="gdcalert1" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to images/image1.jpg). Store image on your image server and adjust path/filename/extension if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert2">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
-![alt_text](images/image1.jpg "image_tooltip")
+	
+	
+### **2a. Youtube Chatbot Version 1**
 
 
 	The Initial User Inquiry would have the user give their name, the topic, what they like about the topic, and what they dislike about the topic. This establishes a baseline to train the Chatbot about the user. 
 
 
-
-<p id="gdcalert2" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to images/image2.jpg). Store image on your image server and adjust path/filename/extension if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert3">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
-![alt_text](images/image2.jpg "image_tooltip")
-
-
 	The Gathering Information and Knowledge Base portion of our Version 1 Chatbot involved the idea of manually scraping a Youtube video and grabbing the comments. We would be able to apply Word Frequency and find the most relevant words to that video.
-
-
-
-<p id="gdcalert3" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to images/image3.jpg). Store image on your image server and adjust path/filename/extension if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert4">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
-![alt_text](images/image3.jpg "image_tooltip")
 
 
 	Response Generation would finally train the model with the data given above and generate a response for the user. Our model could carry on the conversation, but there wouldn’t be any way for the user to discuss other topics or give new Youtube links for the user.
 
 
 
-<p id="gdcalert4" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to images/image4.jpg). Store image on your image server and adjust path/filename/extension if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert5">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
-![alt_text](images/image4.jpg "image_tooltip")
-
-
-
-## 
-    **2b.** **Youtube Chatbot Version 2**
-
-
-
-<p id="gdcalert5" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to images/image5.png). Store image on your image server and adjust path/filename/extension if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert6">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
-![alt_text](images/image5.png "image_tooltip")
+###**2b.** **Youtube Chatbot Version 2**
 
 
 	Version 2 is a more defined and layed out implementation of our initial model -- Version 1. It expands to the control structures necessary to provide clarity to _developers_ and also gives a clear pathway that any layman could intuitively. As you can see it still lacks a lot of features and implementation details necessary for the Chatbot but generally gives a more refined understanding of the various states the program would be at given initial conditions and appropriate context.
+	
 
+###**2c.** **Youtube Chatbot Version 3**
 
-## 
-    
-
-
-## 
-    **2c.** **Youtube Chatbot Version 3**
 
 	We expanded upon Version 2 by hashing out the details for certain features such as names, likes, and dislikes. At an even lower level of abstraction, we made sure to detail the execution of several minute features that have incredibly powerful implications in the overall functionality of our Chatbot. For example, the user would have a saved profile so that the Chatbot would recognize your name, likes, and dislikes the next time you open the program. Furthermore, the user could change the topic after they finish the conversation with the Chatbot. Lastly, the user would also be able to specify any topic and choose amongst a selection of videos rather than having the Chatbot exclusively look at youtube links. This enables the chatbot to give more choice and freedom to the user and lets the finality of a conversation topic be up to the user entirely.
-
-
-
-<p id="gdcalert6" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to images/image6.jpg). Store image on your image server and adjust path/filename/extension if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert7">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
-![alt_text](images/image6.jpg "image_tooltip")
 
 
 	Notice that here we are starting to get even less into the abstraction and more into the details by having various loops defined that will enhance and define the behavior of the Chatbot. (<span style="text-decoration:underline;">IGNORE THE TEXT LABELED V2</span>)
 
 
 
-3. **Explanation on Subdivision of Components**
-
-
-
-<p id="gdcalert7" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to images/image7.jpg). Store image on your image server and adjust path/filename/extension if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert8">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
-![alt_text](images/image7.jpg "image_tooltip")
+##**3.** **Explanation on Subdivision of Components**
 
 
 This is meant to show the initial functional structure of our actual program. Although the structure is still technically maintained, there are additional pieces that have since been added on to ensure the quality of our Chatbot.
 
 
-### **3a. main_chat**
+###**3a. main_chat**
 
 _main_chat_ would encompass the entire program so that the user can run “main.py”, which would import all of the other necessary files from the same directory. 
 
 
-### **3b. check_if_first_instance**
+###**3b. check_if_first_instance**
 
 _check_if_first_instance_ checks whether or not a User File exists. If it doesn’t, a user file is created in the same directory for the user. If it does, then the user file is loaded and used.
 
 
-
-<p id="gdcalert8" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to images/image8.jpg). Store image on your image server and adjust path/filename/extension if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert9">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
-![alt_text](images/image8.jpg "image_tooltip")
-
-
-
-### 
-
-
-### **3c. looping_functionality**
+###**3c. looping_functionality**
 
 _looping_functionality_ is the main chat functionality of the Chatbot. This is subdivided into three separate functions: topic_verification, chatbot_configs, and freed_chatbot.
 
 
-### **3d. topic_verification **
+###**3d. topic_verification **
 
 	_topic_verification_ is the true beginning of the chat functionality. In this instance, the Chatbot will ask the user for a topic or a Youtube link. If a topic is provided, a user will have a choice in 5 videos. The user must choose one of the 5 videos to discuss. If a Youtube link is provided, this step is skipped and the Chatbot will go directly to asking about the user’s likes and dislikes.
-
-
-
-<p id="gdcalert9" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to images/image9.jpg). Store image on your image server and adjust path/filename/extension if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert10">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
-![alt_text](images/image9.jpg "image_tooltip")
 
 
 	The bot will then ask about the user’s likes and dislikes. These likes and dislikes will be used to feed into the Chatbot model.
 
 
-
-<p id="gdcalert10" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to images/image10.jpg). Store image on your image server and adjust path/filename/extension if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert11">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
-![alt_text](images/image10.jpg "image_tooltip")
-
-
-
-
-<p id="gdcalert11" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to images/image11.jpg). Store image on your image server and adjust path/filename/extension if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert12">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
-![alt_text](images/image11.jpg "image_tooltip")
-
-
 Here we show a piece of the topic verification from our larger scale model from the top of the page.
 
-<p id="gdcalert12" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to images/image12.jpg). Store image on your image server and adjust path/filename/extension if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert13">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
 
-
-![alt_text](images/image12.jpg "image_tooltip")
-
-
-
-### 
-
-
-### **3e. chatbot_configs**
+###**3e. chatbot_configs**
 
 	chatbot_configs() would take data from multiple sources and feed them into the model for training. This data includes the video name, a list of the most common words commented under the video, and a sentiment analysis of the comments under the video. The Chatbot would then produce a Chatbot given this information.
 
 
-
-<p id="gdcalert13" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to images/image13.jpg). Store image on your image server and adjust path/filename/extension if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert14">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
-![alt_text](images/image13.jpg "image_tooltip")
-
-
-
-
-<p id="gdcalert14" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to images/image14.jpg). Store image on your image server and adjust path/filename/extension if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert15">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
-![alt_text](images/image14.jpg "image_tooltip")
-
-
-
-### **3f. freed_chatbot**
+###**3f. freed_chatbot**
 
 	freed_chatbot() takes in the textual output that ChatGPT was given in the ChatBot Configs file. As previously mentioned the ChatBot Configs function, we provide sentiment analysis from various NLP techniques we learned in class and then ChatGPT spits out a narrative in which the user can see. From there, ChatGPT loops in which the user can freely interact with the Chatbot and ChatGPT was provided with all of the external data extracted from each of the knowledge bases.
 
 
 
-4. **NLP Techniques**
+##**4.** **NLP Techniques**
 
 
-### **4a. Clean Text**
+###**4a. Clean Text**
 
 	The first NLP technique utilized was cleaning the provided text from the Youtube comments. The following steps are taken in order to clean the text:
 
 
 
 1. Remove all newline and tab characters
+
 2. Remove non-alphanumeric characters from the text
+
 3. Lower the text
+
 4. Use NLTK’s word tokenizer to split the words
+
 5. Lemmatize the individual words to get their base word
+
 6. Remove non-English words from the text
+
 7. Remove stopwords using NLTK’s English stop words
+
 
 The text is properly filtered for processing to use within the other NLP techniques.
 
 
-### **4b. Word Frequency**
+###**4b. Word Frequency**
 
 	Word Frequency is utilized in order to train the model on the most frequent words that appear within the comment section of the Youtube video. Word Frequency enables the Chatbot to use some of the common words as well as give the Chatbot the general topic and idea of the video.
 
 
 
-<p id="gdcalert15" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to images/image15.jpg). Store image on your image server and adjust path/filename/extension if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert16">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
-![alt_text](images/image15.jpg "image_tooltip")
-
-
-
-### **4c. Sentiment Analysis**
+###**4c. Sentiment Analysis**
 
 	Sentiment Analysis takes in an input of the cleaned Youtube comments and outputs an overall sentiment score of the comments. It splits each of these words into 3 categories: negative, neutral, and positive. This function can give the Chatbot a reference on how other people view the video.
 
 	For example, the statement “Hello! I hate people. I like puppies.” returns the following sentiment score:
-
-
-
-<p id="gdcalert16" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to images/image16.jpg). Store image on your image server and adjust path/filename/extension if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert17">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
-![alt_text](images/image16.jpg "image_tooltip")
-
-
-<p id="gdcalert17" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to images/image17.jpg). Store image on your image server and adjust path/filename/extension if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert18">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
-![alt_text](images/image17.jpg "image_tooltip")
-
-
-<p id="gdcalert18" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to images/image18.jpg). Store image on your image server and adjust path/filename/extension if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert19">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
-![alt_text](images/image18.jpg "image_tooltip")
 
 
 The overall statement is 42.1% negative, 31.6% neutral, and 26.3% positive. This can give the Chatbot an overall context on whether or not commenters enjoyed the video.
@@ -321,18 +140,11 @@ Combining all 3 of the NLP Techniques listed above can be used to train the Chat
 
 
 
-5. **Live Lookup of the Data (Knowledge Base)**
+##**5.** **Live Lookup of the Data (Knowledge Base)**
 
 	We utilize [Youtube Data API v3](https://developers.google.com/youtube/v3) to quickly lookup the data from Youtube. By using an API, we were able to avoid expensive scraping techniques that would take a long time to process data. The _YoutubeToolkit.py _file displays the techniques in which we were able to get data from the API.
 
 	We first have to utilize the Knowledge Base if a user wants to talk about a topic. Data is retrieved using the topic as a search term on Youtube. The first 5 results of the search term, along with their link, is then displayed for the user to select one video.A
-
-
-
-<p id="gdcalert19" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to images/image19.jpg). Store image on your image server and adjust path/filename/extension if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert20">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
-![alt_text](images/image19.jpg "image_tooltip")
  
 
 	We then utilize that the user-provided URL or the chosen video has the API enabled and that we are able to retrieve all of the comments.
@@ -359,24 +171,16 @@ Combining all 3 of the NLP Techniques listed above can be used to train the Chat
 
 	The User Model created by the program is used to save the user’s name, likes, and dislikes that is extracted from their input. This allows the Chatbot to load previous conversations it’s had with the user anytime the user returns to the program.
 
-
-
-<p id="gdcalert22" ><span style="color: red; font-weight: bold">>>>>>  gd2md-html alert: inline image link here (to images/image22.jpg). Store image on your image server and adjust path/filename/extension if necessary. </span><br>(<a href="#">Back to top</a>)(<a href="#gdcalert23">Next alert</a>)<br><span style="color: red; font-weight: bold">>>>>> </span></p>
-
-
-![alt_text](images/image22.jpg "image_tooltip")
-
-
 	previous_msg_list is a chat history that is stored within the User object. This gives the Chatbot context about its previous conversations with the user. thoughts() are thoughts that the Chatbot has given the user. This is stored so that there is variation in how the Chatbot can ask the user to give their thoughts.
 
 	
 
 
 
-7. **Analysis of the Chatbot**
+##7. **Analysis of the Chatbot**
 
 
-## **7a. Strengths**
+###**7a. Strengths**
 
 
 
