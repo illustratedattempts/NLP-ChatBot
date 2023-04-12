@@ -180,7 +180,7 @@ previous_msg_list is a chat history that is stored within the User object. This 
 * The ChatBot can take in live data from the Youtube API and is able to handle dynamic prompts at certain instances in the chatbot model such as freed_chatbot().
 
 
-## **7b. Weaknesses**
+### **7b. Weaknesses**
 
 * The conversations can feel repetitive at times. The functionality of the Chatbot is purely to provide feedback about Youtube videos. However, the Chatbot cannot watch the videos and so cannot give context from within the video. The data fed into the Chatbot is purely from the comments section.
 
