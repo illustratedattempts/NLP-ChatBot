@@ -77,7 +77,7 @@ _looping_functionality_ is the main chat functionality of the Chatbot. This is s
 
 ### **3d. topic_verification**
 
-_topic_verification_ is the true beginning of the chat functionality. In this instance, the Chatbot will ask the user for a topic or a Youtube link. If a topic is provided, a user will have a choice in 5 videos. The user must choose one of the 5 videos to discuss. If a Youtube link is provided, this step is skipped and the Chatbot will go directly to asking about the user’s likes and dislikes.
+_topic_verification_ is the true beginning of the chat functionality. In this instance, the Chatbot will ask the user for a topic or a Youtube link. If a topic is provided, a user will have a choice of 5 videos. The user must choose one of the 5 videos to discuss. If a Youtube link is provided, this step is skipped and the Chatbot will go directly to asking about the user’s likes and dislikes.
 
 
 The bot will then ask about the user’s likes and dislikes. These likes and dislikes will be used to feed into the Chatbot model.
@@ -88,8 +88,7 @@ Here we show a piece of the topic verification from our larger scale model from 
 
 ### **3e. chatbot_configs**
 
-chatbot_configs() would take data from multiple sources and feed them into the model for training. This data includes the video name, a list of the most common words commented under the video, and a sentiment analysis of the comments under the video. The Chatbot would then produce a Chatbot given this information.
-
+chatbot_configs() would take data from multiple sources and feed them into the model for training. This data includes the video name, a list of the most common words commented under the video, and a sentiment analysis of the comments under the video. The Chatbot would then produce more contextual dialogue given this information.
 
 ### **3f. freed_chatbot**
 
