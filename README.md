@@ -1,4 +1,4 @@
-The documentation of the README can be found [here]('./ChatBotFinalReport_ttv170230_abv210001.pdf')
+The documentation of the README can be found [here]('https://github.com/illustratedattempts/NLP-ChatBot/blob/main/ChatBotFinalReport_ttv170230_abv210001.pdf')
 
 
 ## Alejo Vinluan (abv210001)**	
