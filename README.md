@@ -7,7 +7,7 @@
 # CHATBOT FINAL REPORT
 
 
-## ** 1. Overview **
+## 1. Overview
 
 The goal of this assignment was to create a Chatbot while utilizing NLP techniques that were learned in class. The Chatbot must carry on a conversation within the domain while using knowledge from the user and knowledge from the web.
 
@@ -151,7 +151,7 @@ After verifications are done, we fetch data from the video the user has chosen i
 
 
 
-6. **User Models**
+## **6. User Models**
 
 The User Model created by the program is used to save the user’s name, likes, and dislikes that is extracted from their input. This allows the Chatbot to load previous conversations it’s had with the user anytime the user returns to the program.
 
