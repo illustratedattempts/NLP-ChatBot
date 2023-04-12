@@ -12,49 +12,6 @@ import os
 import streamlit as st
 from streamlit_chat import message
 
-# @TODO Will need to work on getting the input box to be at the bottom
-#
-def main():
-    # An observation is that the st.session_state is saved somehow regardless of continuous reruns of the invoked python file
-    # This implies that when a program is rerun, the memory is not saved yet this is a contradiction to that reasoning.
-
-    # This is for a new run of streamlit, so we have to initialize all the variables here
-    if 'state' not in st.session_state:
-        st.session_state['state'] = ['New_Instance']
-        st.session_state['checked_history'] = None
-        st.session_state['prev_user_log'] = None
-        st.session_state['user'] = None
-        st.session_state['message_history'] = None
-        st.session_state['CB_OBJ'] = Chatbot()
-        st.session_state['YT_OBJ'] = YoutubeToolkit() # Error Here Perhaps? (file_cache is only supported with oauth2client<4.0.0)
-        st.session_state['NLP_OBJ'] = NLPTechniques()
-    # message("State before switch-case: " + str(st.session_state['state'][-1]))
-
-    match st.session_state['state'][-1]:
-        case 'New_Instance':
-            if not check_if_history_exists():
-                message("What's your name?")
-                user_input = get_text('User')
-                st.session_state['user'] = User(user_input)
-            else:  # User data already exists in the directory
-                print("@TODO Implement Importing User Data")
-                st.session_state['user'] = st.session_state['prev_user_log']
-                st.session_state['prev_user_log'] = None
-            message("Hello " + st.session_state['user'].name)
-            message("Whenever you want to leave the chat, use !exit")
-            st.session_state['state'].append('Start_New_Topic')
-        case 'Start_New_Topic':
-            message('What do you want to discuss?')
-        case 'Get_Likes_And_Dislikes':
-            get_likes_and_dislikes()
-        case 'Chatbot_Configs':
-            chatbot_configs()
-        case 'Freed_Chat':
-            freed_chat()
-        case 'Add_Feedback':
-            ask_feedback()
-        
-
 def check_if_history_exists():
     files_list = os.listdir('./')
     for file in files_list:
@@ -78,24 +35,28 @@ def get_text():
     return text
 
 def get_likes_and_dislikes():
-    message("What do you like about the video?")
+    st.session_state['generated'].append("What do you like about the video?")
     text = get_text("User")
     if text == '!newtopic':
         st.session_state['state'] = 'Ask_Feedback'
     if text == '!exit':
-        message("Thanks for trying Youtube Bot! :)")
+        st.session_state['generated'].append("Thanks for trying Youtube Bot! :)")
         sys.exit(0)
     st.session_state['user'].likes.append(text)
-    message(text, is_user=True)
-    message("What do you not like about the video?")
+    st.session_state['past'].append(text)
+    with open('chat_data.p', 'wb') as f:
+        pickle.dump(st.session_state['user'], f)
+    st.session_state['generated'].append("What do you not like about the video?")
     text = get_text("User")
     if text == '!newtopic':
         st.session_state['state'] = 'Ask_Feedback'
     if text == '!exit':
-        message("Thanks for trying Youtube Bot! :)")
+        st.session_state['generated'].append("Thanks for trying Youtube Bot! :)")
         sys.exit(0)
     st.session_state['user'].dislikes.append(text)
-    message(text, is_user=True)
+    st.session_state['past'].append(text)
+    with open('chat_data.p', 'wb') as f:
+        pickle.dump(st.session_state['user'], f)
 
 def chatbot_configs():
     # Get the comments from the video
@@ -149,21 +110,23 @@ def chatbot_configs():
         "role": "assistant",
         "content": bot_message
     })
-    message(bot_message)
+    st.session_state['generated'].append(bot_message)
 
 def ask_feedback():
     bot_message = st.session_state["CT_OBJ"].generate_thoughts(
         st.session_state['user'].previous_msg_list
     )
-    message(bot_message)
+    st.session_state['generated'].append(bot_message)
     text = get_text("User")
     if text == '!newtopic':
         st.session_state['state'] = 'Ask_Feedback'
     if text == '!exit':
-        message("Thanks for trying Youtube Bot! :)")
+        st.session_state['generated'].append("Thanks for trying Youtube Bot! :)")
         sys.exit(0)
     st.session_state['user'].thoughts.append(text)
-    message(text, is_user=True)
+    st.session_state['past'].append(text)
+    with open('chat_data.p', 'wb') as f:
+        pickle.dump(st.session_state['user'], f)
     st.session_state['state'] = 'Start_New_Topic'
 
 
@@ -171,22 +134,68 @@ def freed_chat():
     st.session_state['message_log'].append({
         "role": "system",
         "content": "Continue the conversation about the topic above!"})
-    message("If you want a new topic, feel free to use !newtopic")
+    st.session_state['generated'].append("If you want a new topic, feel free to use !newtopic")
     while True:
         text = get_text("User")
         if text == '!newtopic':
             st.session_state['state'] = 'Ask_Feedback'
         if text == '!exit':
-            message("Thanks for trying Youtube Bot! :)")
+            st.session_state['generated'].append("Thanks for trying Youtube Bot! :)")
             sys.exit(0)
-        message(text, is_user=True)
+        st.session_state['past'].append(text)
         st.session_state['message_log'].append({"role": "user", "content": text})
         bot_message = st.session_state["CT_OBJ"].generate_message(
             st.session_state['message_log']
         )
         st.session_state['message_log'].append({"role": "assistant", "content": bot_message})
-        message(bot_message)
+        st.session_state['generated'].append(bot_message)
     
-    
-if __name__ == '__main__':
-    freed_chat()
+"""
+if 'state' not in st.session_state:
+    st.session_state['state'] = ['New_Instance']
+    st.session_state['checked_history'] = None
+    st.session_state['prev_user_log'] = None
+    st.session_state['user'] = None
+    st.session_state['message_history'] = None
+    st.session_state['CB_OBJ'] = Chatbot()
+    st.session_state['YT_OBJ'] = YoutubeToolkit() # Error Here Perhaps? (file_cache is only supported with oauth2client<4.0.0)
+    st.session_state['NLP_OBJ'] = NLPTechniques()
+"""
+if "state" not in st.session_state:
+    st.session_state['state'] = 'Freed_Chat'
+    st.session_state['message_log'] = []
+    st.session_state['generated'] = []
+    st.session_state['past'] = []
+    st.session_state['CB_OBJ'] = Chatbot()
+
+match st.session_state['state'][-1]:
+    case 'New_Instance':
+        if not check_if_history_exists():
+            st.session_state['generated'].append("What's your name?")
+            user_input = get_text('User')
+            st.session_state['user'] = User(user_input)
+            with open('chat_data.p', 'wb') as f:
+                pickle.dump(st.session_state['user'], f)
+        else:  # User data already exists in the directory
+            print("@TODO Implement Importing User Data")
+            st.session_state['user'] = st.session_state['prev_user_log']
+            st.session_state['prev_user_log'] = None
+        st.session_state['generated'].append("Hello " + st.session_state['user'].name)
+        st.session_state['generated'].append("Whenever you want to leave the chat, use !exit")
+        st.session_state['state'].append('Start_New_Topic')
+    case 'Start_New_Topic':
+        st.session_state['generated'].append('What do you want to discuss?')
+    case 'Get_Likes_And_Dislikes':
+        get_likes_and_dislikes()
+    case 'Chatbot_Configs':
+        chatbot_configs()
+    case 'Freed_Chat':
+        freed_chat()
+    case 'Add_Feedback':
+        ask_feedback()
+
+if st.session_state['generated']:
+    for i in range(len(st.session_state['generated'])-1, -1, -1):
+        message(st.session_state["generated"][i], key=str(i))
+        message(st.session_state['past'][i], is_user=True, key=str(i) + '_user')
+
