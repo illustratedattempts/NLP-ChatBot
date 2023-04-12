@@ -256,23 +256,6 @@ class Main:
             pickle.dump(self.user_data, f)
         return
 
-    def regular_chat(self):
-        self.message_log.append(
-            {"role": "system", "content": "Generate your first response, given the information above."})
-        self.message_log.append({
-            "role": "system",
-            "content": "After the user responds, continue the conversaion how ChatGPT normally would"})
-        bot_message = self.chat.generate_message(self.message_log)
-        while True:
-            print("YouTube Bot:", textwrap.fill(bot_message, 60), "\n")
-            user_msg = input("{}: ".format(self.user_name))
-            print()
-            if user_msg == '!exit':
-                print("Thanks for talking to Youtube Bot :)\n")
-                sys.exit(0)
-            self.message_log.append({"role": "user", "content": user_msg})
-            bot_message = self.chat.generate_message(self.message_log)
-
 
 if __name__ == '__main__':
     main = Main()
