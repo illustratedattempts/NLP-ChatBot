@@ -72,7 +72,7 @@ _check_if_first_instance_ checks whether or not a User File exists. If it doesnâ
 _looping_functionality_ is the main chat functionality of the Chatbot. This is subdivided into three separate functions: topic_verification, chatbot_configs, and freed_chatbot.
 
 
-### **3d. topic_verification **
+### **3d. topic_verification**
 
 _topic_verification_ is the true beginning of the chat functionality. In this instance, the Chatbot will ask the user for a topic or a Youtube link. If a topic is provided, a user will have a choice in 5 videos. The user must choose one of the 5 videos to discuss. If a Youtube link is provided, this step is skipped and the Chatbot will go directly to asking about the userâ€™s likes and dislikes.
 
@@ -161,10 +161,10 @@ previous_msg_list is a chat history that is stored within the User object. This 
 
 
 
-##7. **Analysis of the Chatbot**
+## 7. **Analysis of the Chatbot**
 
 
-###**7a. Strengths**
+### **7a. Strengths**
 
 
 
