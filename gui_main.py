@@ -22,17 +22,8 @@ def check_if_history_exists():
 
 
 def get_text():
-    # https://stackoverflow.com/questions/2603956/can-we-have-assignment-in-a-condition
-    # https://discuss.streamlit.io/t/how-to-hide-streamlit-text-input-after-input/10832/2
-    text_input_container = st.empty()
-    text = text_input_container.text_input("User")
-
-    if not text:
-        st.stop()
-    else:
-        text_input_container.empty()
-        st.info(text)
-    return text
+    input_text = st.text_input("You: ","Hello, how are you?", key="input")
+    return input_text 
 
 def get_likes_and_dislikes():
     st.session_state['generated'].append("What do you like about the video?")
