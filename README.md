@@ -1,10 +1,9 @@
 The documentation of the README can be found [here](https://github.com/illustratedattempts/NLP-ChatBot/blob/main/ChatBotFinalReport_ttv170230_abv210001.pdf)
 
 
-## Alejo Vinluan (abv210001)**	
+## Alejo Vinluan (abv210001) <div style="text-align: right">## Thanh Vo (ttv170230)</div>
 
 
-## Thanh Vo (ttv170230)
 
 
 # CHATBOT FINAL REPORT
