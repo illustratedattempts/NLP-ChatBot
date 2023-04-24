@@ -16,7 +16,7 @@ There are several steps in our system.
 1. We begin by <strong>finding</strong> either previous existing user data or <strong>prompting</strong> the user for their name.
 2. Once the user data is established, we grab the topic/video the user wants.
 4. We ask for the user opinion on the topic/video. 
-5. After that, we do <strong>NLP techniques</span> on the Youtube comments.
+5. After that, we do <strong>NLP techniques</strong> on the Youtube comments.
 6. Then we generate an analysis that is outputted.
 7. Finally, the user can talk with the chatbot.
 8. If the user feels like, they can move on to a new topic.
