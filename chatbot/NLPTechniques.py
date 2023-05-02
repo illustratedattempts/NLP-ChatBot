@@ -4,6 +4,7 @@ from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
+
 class NLPTechniques:
     # Cleans the list of comments
     def clean_text_array(self, comment_list):
@@ -13,7 +14,7 @@ class NLPTechniques:
             if len(clean_text) > 2:
                 clean_arr.append(clean_text)
         return clean_arr
-    
+
     # Input: String of text
     # Output: List of filtered words
     def clean_text(self, text):
@@ -25,7 +26,7 @@ class NLPTechniques:
         text = text.lower()
         # Tokenize the text
         words = word_tokenize(text)
-        #Lemmatize the words
+        # Lemmatize the words
         lemmatizer = WordNetLemmatizer()
         lemmatized_tokens = [lemmatizer.lemmatize(token) for token in words]
         # Filter for English words
@@ -34,7 +35,7 @@ class NLPTechniques:
         stop_words = stopwords.words('english')
         english_words = [word for word in english_words if word not in stop_words]
         return english_words
-    
+
     # Input: list of comments
     # Output: dictionary of word counter
     def word_frequency(self, comment_list):
@@ -46,14 +47,15 @@ class NLPTechniques:
                 else:
                     word_dict[word] += 1
         return word_dict
-        
+
     # Input: String of clean words
     # Output: Sentiment score
     def sentiment_analysis(self, words):
         sa = SentimentIntensityAnalyzer()
         score = sa.polarity_scores(words)
         return [score['neg'] * 100, score['neu'] * 100, score['pos'] * 100]
-    
+
+
 if __name__ == '__main__':
     nlp = NLPTechniques()
     a = nlp.sentiment_analysis("Hello! I hate people. I like puppies.")
